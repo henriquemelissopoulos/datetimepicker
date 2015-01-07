@@ -1,82 +1,86 @@
 package com.fourmob.datetimepicker.sample;
 
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.CheckBox;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fourmob.datetimepicker.date.DatePickerDialog;
-import com.fourmob.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
+import com.sleepbot.datetimepicker.time.TimePickerView;
 
 import java.util.Calendar;
 
-public class MainActivity extends FragmentActivity implements OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class MainActivity extends FragmentActivity implements DatePickerDialog.OnDateSetListener, TimePickerView.OnTimeSetListener, TimePickerDialog.OnTimeSetListener {
 
     public static final String DATEPICKER_TAG = "datepicker";
     public static final String TIMEPICKER_TAG = "timepicker";
+
+    public TextView tvHour;
+    public TextView tvMinute;
+    public Button btDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        tvHour = (TextView) findViewById(R.id.tvHour);
+        tvMinute = (TextView) findViewById(R.id.tvMinute);
+        btDialog = (Button) findViewById(R.id.btDialog);
+
+
         final Calendar calendar = Calendar.getInstance();
+        final TimePickerView timePickerView = TimePickerView.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true, false);
 
-        final DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), isVibrate());
-        final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY) ,calendar.get(Calendar.MINUTE), false, false);
-
-        findViewById(R.id.dateButton).setOnClickListener(new OnClickListener() {
-
+        tvHour.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                datePickerDialog.setVibrate(isVibrate());
-                datePickerDialog.setYearRange(1985, 2028);
-                datePickerDialog.setCloseOnSingleTapDay(isCloseOnSingleTapDay());
-                datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
+            public void onClick(View view) {
+                timePickerView.setCurrentItemShowing(TimePickerView.HOUR_INDEX, true, false, true);
             }
         });
 
-        findViewById(R.id.timeButton).setOnClickListener(new OnClickListener() {
+        tvMinute.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                timePickerDialog.setVibrate(isVibrate());
-                timePickerDialog.setCloseOnSingleTapMinute(isCloseOnSingleTapMinute());
-                timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
+            public void onClick(View view) {
+                timePickerView.setCurrentItemShowing(TimePickerView.MINUTE_INDEX, true, false, true);
             }
         });
 
-        if (savedInstanceState != null) {
-            DatePickerDialog dpd = (DatePickerDialog) getSupportFragmentManager().findFragmentByTag(DATEPICKER_TAG);
-            if (dpd != null) {
-                dpd.setOnDateSetListener(this);
+
+        final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false, false);
+        btDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timePickerDialog.show(getSupportFragmentManager(), "whatever");
             }
+        });
 
-            TimePickerDialog tpd = (TimePickerDialog) getSupportFragmentManager().findFragmentByTag(TIMEPICKER_TAG);
-            if (tpd != null) {
-                tpd.setOnTimeSetListener(this);
-            }
-        }
-    }
 
-    private boolean isVibrate() {
-        return ((CheckBox) findViewById(R.id.checkBoxVibrate)).isChecked();
-    }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.flTimerContainer, timePickerView)
+                .commit();
 
-    private boolean isCloseOnSingleTapDay() {
-        return ((CheckBox) findViewById(R.id.checkBoxCloseOnSingleTapDay)).isChecked();
-    }
-
-    private boolean isCloseOnSingleTapMinute() {
-        return ((CheckBox) findViewById(R.id.checkBoxCloseOnSingleTapMinute)).isChecked();
     }
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
         Toast.makeText(MainActivity.this, "new date:" + year + "-" + month + "-" + day, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onHourSet(CharSequence hourOfDay) {
+        tvHour.setText(hourOfDay);
+    }
+
+    @Override
+    public void onMinuteSet(CharSequence minute) {
+        tvMinute.setText(minute);
     }
 
     @Override

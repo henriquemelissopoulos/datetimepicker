@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,41 +6,58 @@
     android:gravity="center"
     tools:context=".MainActivity" >
 
-    <CheckBox
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/rlTimer"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="vibrate"
-        android:layout_marginBottom="30dp"
-        android:id="@+id/checkBoxVibrate"
-        android:checked="true"/>
+        android:gravity="center_horizontal">
 
-    <CheckBox
+    <TextView
+        android:id="@+id/tvHour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="close on single tap day"
-        android:layout_marginBottom="30dp"
-        android:id="@+id/checkBoxCloseOnSingleTapDay"
-        android:checked="true"/>
+        android:text="@string/time_placeholder"
+        android:gravity="center_horizontal"
+        style="@style/time_label"/>
+
+    <TextView
+        android:id="@+id/separator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/time_separator"
+        android:paddingLeft="@dimen/separator_padding"
+        android:paddingRight="@dimen/separator_padding"
+        style="@style/time_label"
+        android:layout_toRightOf="@+id/tvHour"
+        android:layout_toEndOf="@+id/tvHour"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:id="@+id/tvMinute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/time_placeholder"
+        style="@style/time_label"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/separator"
+        android:layout_toEndOf="@+id/separator" />
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/flTimerContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlTimer"
+        android:layout_centerHorizontal="true"
+        />
 
     <Button
-        android:id="@+id/dateButton"
-        android:layout_width="wrap_content"
+        android:id="@+id/btDialog"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:text="Select Date" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="close on single tap minute"
-        android:layout_marginBottom="30dp"
-        android:id="@+id/checkBoxCloseOnSingleTapMinute"
-        android:checked="true"/>
-
-    <Button
-        android:id="@+id/timeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select Time" />
-
-</LinearLayout>
+</RelativeLayout>
