@@ -162,6 +162,7 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
         mListener = listener;
     }
 
+
     /**
      * Initialize the Layout with starting values.
      *
@@ -172,6 +173,21 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
      */
     public void initialize(Context context, int initialHoursOfDay, int initialMinutes,
                            boolean is24HourMode, boolean vibrate) {
+        this.initialize(context, initialHoursOfDay, initialMinutes, is24HourMode, vibrate, 0);
+    }
+
+
+    /**
+     * Initialize the Layout with starting values.
+     *
+     * @param context
+     * @param initialHoursOfDay
+     * @param initialMinutes
+     * @param is24HourMode
+     * @param selectorColor Resource color for selector
+     */
+    public void initialize(Context context, int initialHoursOfDay, int initialMinutes,
+                           boolean is24HourMode, boolean vibrate, int selectorColor) {
         if (mTimeInitialized) {
             Log.e(TAG, "Time has already been initialized.");
             return;
@@ -214,10 +230,10 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
         setValueForItem(MINUTE_INDEX, initialMinutes);
         int hourDegrees = (initialHoursOfDay % 12) * HOUR_VALUE_TO_DEGREES_STEP_SIZE;
         mHourRadialSelectorView.initialize(context, mHideAmPm, is24HourMode, true,
-                hourDegrees, isHourInnerCircle(initialHoursOfDay));
+                hourDegrees, isHourInnerCircle(initialHoursOfDay), selectorColor);
         int minuteDegrees = initialMinutes * MINUTE_VALUE_TO_DEGREES_STEP_SIZE;
         mMinuteRadialSelectorView.initialize(context, mHideAmPm, false, false,
-                minuteDegrees, false);
+                minuteDegrees, false, selectorColor);
 
         mTimeInitialized = true;
     }

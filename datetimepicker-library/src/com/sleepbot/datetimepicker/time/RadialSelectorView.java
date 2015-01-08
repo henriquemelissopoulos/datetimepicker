@@ -84,6 +84,27 @@ public class RadialSelectorView extends View {
      */
     public void initialize(Context context, boolean is24HourMode, boolean hasInnerCircle,
                            boolean disappearsOut, int selectionDegrees, boolean isInnerCircle) {
+
+            this.initialize(context, is24HourMode, hasInnerCircle, disappearsOut, selectionDegrees, isInnerCircle, 0);
+        }
+
+    /**
+     * Initialize this selector with the state of the picker.
+     *
+     * @param context          Current context.
+     * @param is24HourMode     Whether the selector is in 24-hour mode, which will tell us
+     *                         whether the circle's center is moved up slightly to make room for the AM/PM circles.
+     * @param hasInnerCircle   Whether we have both an inner and an outer circle of numbers
+     *                         that may be selected. Should be true for 24-hour mode in the hours circle.
+     * @param disappearsOut    Whether the numbers' animation will have them disappearing out
+     *                         or disappearing in.
+     * @param selectionDegrees The initial degrees to be selected.
+     * @param isInnerCircle    Whether the initial selection is in the inner or outer circle.
+     *                         Will be ignored when hasInnerCircle is false.
+     * @param selectorColor    Resource color for selector
+     */
+    public void initialize(Context context, boolean is24HourMode, boolean hasInnerCircle,
+                           boolean disappearsOut, int selectionDegrees, boolean isInnerCircle, int selectorColor) {
         if (mIsInitialized) {
             Log.e(TAG, "This RadialSelectorView may only be initialized once.");
             return;
@@ -91,8 +112,12 @@ public class RadialSelectorView extends View {
 
         Resources res = context.getResources();
 
-        int blue = res.getColor(R.color.blue);
-        mPaint.setColor(blue);
+        //if no selectorColor set, use the default color
+        if (selectorColor == 0) {
+            selectorColor = res.getColor(R.color.blue);
+        }
+
+        mPaint.setColor(selectorColor);
         mPaint.setAntiAlias(true);
 
         // Calculate values for the circle radius size.

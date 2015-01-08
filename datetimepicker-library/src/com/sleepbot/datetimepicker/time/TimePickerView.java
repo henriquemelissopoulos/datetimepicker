@@ -46,6 +46,7 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
     private static final String KEY_IN_KB_MODE = "in_kb_mode";
     private static final String KEY_TYPED_TIMES = "typed_times";
     private static final String KEY_VIBRATE = "vibrate";
+    private static final String KEY_SELECTOR_COLOR = "selector_color";
 
     public static final int HOUR_INDEX = 0;
     public static final int MINUTE_INDEX = 1;
@@ -64,8 +65,6 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
     private View mAmPmHitspace;
     private RadialPickerLayout mTimePicker;
 
-    private int mBlue;
-    private int mBlack;
     private String mAmText;
     private String mPmText;
 
@@ -94,6 +93,9 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
     private boolean mVibrate = true;
     private boolean mCloseOnSingleTapMinute;
 
+    //Color
+    private int mSelectorColor = 0;
+
     /**
      * The callback interface used to indicate the user is done filling in
      * the time (they clicked on the 'Set' button).
@@ -113,16 +115,16 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
     }
 
     public static TimePickerView newInstance(OnTimeSetListener callback, int hourOfDay, int minute, boolean is24HourMode) {
-        return newInstance(callback, hourOfDay, minute, is24HourMode, true);
+        return newInstance(callback, hourOfDay, minute, is24HourMode, true, 0);
     }
 
-    public static TimePickerView newInstance(OnTimeSetListener callback, int hourOfDay, int minute, boolean is24HourMode, boolean vibrate) {
+    public static TimePickerView newInstance(OnTimeSetListener callback, int hourOfDay, int minute, boolean is24HourMode, boolean vibrate, int selectorColor) {
         TimePickerView ret = new TimePickerView();
-        ret.initialize(callback, hourOfDay, minute, is24HourMode, vibrate);
+        ret.initialize(callback, hourOfDay, minute, is24HourMode, vibrate, selectorColor);
         return ret;
     }
 
-    public void initialize(OnTimeSetListener callback, int hourOfDay, int minute, boolean is24HourMode, boolean vibrate) {
+    public void initialize(OnTimeSetListener callback, int hourOfDay, int minute, boolean is24HourMode, boolean vibrate, int selectorColor) {
         mCallback = callback;
 
         mInitialHourOfDay = hourOfDay;
@@ -130,6 +132,7 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
         mIs24HourMode = is24HourMode;
         mInKbMode = false;
         mVibrate = vibrate;
+        mSelectorColor = selectorColor;
     }
 
     public void setOnTimeSetListener(OnTimeSetListener callback) {
@@ -163,6 +166,7 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
             mIs24HourMode = savedInstanceState.getBoolean(KEY_IS_24_HOUR_VIEW);
             mInKbMode = savedInstanceState.getBoolean(KEY_IN_KB_MODE);
             mVibrate = savedInstanceState.getBoolean(KEY_VIBRATE);
+            mSelectorColor = savedInstanceState.getInt(KEY_SELECTOR_COLOR);
         }
     }
 
@@ -178,8 +182,6 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
         mSelectHours = res.getString(R.string.select_hours);
         mMinutePickerDescription = res.getString(R.string.minute_picker_description);
         mSelectMinutes = res.getString(R.string.select_minutes);
-        mBlue = res.getColor(R.color.blue);
-        mBlack = res.getColor(R.color.numbers_text_color);
 
         String[] amPmTexts = new DateFormatSymbols().getAmPmStrings();
         mAmText = amPmTexts[0];
@@ -188,7 +190,7 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
         mTimePicker = (RadialPickerLayout) view.findViewById(R.id.time_picker);
         mTimePicker.setOnValueSelectedListener(this);
         mTimePicker.setOnKeyListener(keyboardListener);
-        mTimePicker.initialize(getActivity(), mInitialHourOfDay, mInitialMinute, mIs24HourMode, mVibrate);
+        mTimePicker.initialize(getActivity(), mInitialHourOfDay, mInitialMinute, mIs24HourMode, mVibrate, mSelectorColor);
         int currentItemShowing = HOUR_INDEX;
         if (savedInstanceState != null &&
                 savedInstanceState.containsKey(KEY_CURRENT_ITEM_SHOWING)) {
@@ -240,6 +242,7 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
                 outState.putIntegerArrayList(KEY_TYPED_TIMES, mTypedTimes);
             }
             outState.putBoolean(KEY_VIBRATE, mVibrate);
+            outState.putInt(KEY_SELECTOR_COLOR, mSelectorColor);
         }
     }
 

@@ -35,7 +35,7 @@ public class MainActivity extends FragmentActivity implements DatePickerDialog.O
 
 
         final Calendar calendar = Calendar.getInstance();
-        final TimePickerView timePickerView = TimePickerView.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true, false);
+        final TimePickerView timePickerView = TimePickerView.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true, false, getResources().getColor(R.color.green));
 
         tvHour.setOnClickListener(new View.OnClickListener() {
             @Override
