@@ -102,8 +102,8 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
      */
     public interface OnTimeSetListener {
 
-        void onHourSet(CharSequence hourOfDay);
-        void onMinuteSet(CharSequence minute);
+        void onHourSet(CharSequence hourOfDay, boolean advance);
+        void onMinuteSet(CharSequence minute, boolean advance);
 
         /**
          * @param view      The view associated with this listener.
@@ -252,7 +252,7 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
     @Override
     public void onValueSelected(int pickerIndex, int newValue, boolean autoAdvance) {
         if (pickerIndex == HOUR_INDEX) {
-            setHour(newValue, false);
+            setHour(newValue, autoAdvance, false);
             String announcement = String.format("%d", newValue);
             if (mAllowAutoAdvance && autoAdvance) {
                 setCurrentItemShowing(MINUTE_INDEX, true, true, false);
@@ -260,7 +260,7 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
             }
             Utils.tryAccessibilityAnnounce(mTimePicker, announcement);
         } else if (pickerIndex == MINUTE_INDEX) {
-            setMinute(newValue);
+            setMinute(newValue, autoAdvance);
             if(mCloseOnSingleTapMinute) {
                 onDoneButtonClick();
             }
@@ -273,6 +273,10 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
     }
 
     private void setHour(int value, boolean announce) {
+        setHour(value, false, announce);
+    }
+
+    private void setHour(int value, boolean advance, boolean announce) {
         String format;
         if (mIs24HourMode) {
             format = "%02d";
@@ -286,7 +290,7 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
 
         CharSequence text = String.format(format, value);
         if (mCallback != null) {
-            mCallback.onHourSet(text);
+            mCallback.onHourSet(text, advance);
         }
 
         if (announce) {
@@ -295,6 +299,10 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
     }
 
     private void setMinute(int value) {
+        setMinute(value, false);
+    }
+
+    private void setMinute(int value, boolean advance) {
         if (value == 60) {
             value = 0;
         }
@@ -302,7 +310,7 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
         Utils.tryAccessibilityAnnounce(mTimePicker, text);
 
         if (mCallback != null) {
-            mCallback.onMinuteSet(text);
+            mCallback.onMinuteSet(text, advance);
         }
 
     }

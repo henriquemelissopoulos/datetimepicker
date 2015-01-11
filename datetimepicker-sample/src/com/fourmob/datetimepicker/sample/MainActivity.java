@@ -74,13 +74,15 @@ public class MainActivity extends FragmentActivity implements DatePickerDialog.O
     }
 
     @Override
-    public void onHourSet(CharSequence hourOfDay) {
+    public void onHourSet(CharSequence hourOfDay, boolean advance) {
         tvHour.setText(hourOfDay);
+        if (advance) System.out.println("hour released");
     }
 
     @Override
-    public void onMinuteSet(CharSequence minute) {
+    public void onMinuteSet(CharSequence minute, boolean advance) {
         tvMinute.setText(minute);
+        if (advance) System.out.println("minute released");
     }
 
     @Override
