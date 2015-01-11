@@ -312,7 +312,11 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
         if (mCallback != null) {
             mCallback.onMinuteSet(text, advance);
         }
+    }
 
+    public void setPickerValues(int hour, int minute) {
+        mTimePicker.setItem(HOUR_INDEX, hour);
+        mTimePicker.setItem(MINUTE_INDEX, minute);
     }
 
     // Show either Hours or Minutes.
@@ -524,7 +528,6 @@ public class TimePickerView extends Fragment implements RadialPickerLayout.OnVal
             setHour(hour, true);
             setMinute(minute);
             setCurrentItemShowing(mTimePicker.getCurrentItemShowing(), true, true, true);
-//            mDoneButton.setEnabled(true);
         }
     }
 

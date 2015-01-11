@@ -250,7 +250,7 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
     /**
      * Set either the hour or the minute. Will set the internal value, and set the selection.
      */
-    private void setItem(int index, int value) {
+    public void setItem(int index, int value) {
         if (index == HOUR_INDEX) {
             setValueForItem(HOUR_INDEX, value);
             int hourDegrees = (value % 12) * HOUR_VALUE_TO_DEGREES_STEP_SIZE;
